@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>iot test</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sketchy/bootstrap.min.css"
+      integrity="sha384-RxqHG2ilm4r6aFRpGmBbGTjsqwfqHOKy1ArsMhHusnRO47jcGqpIQqlQK/kmGy9R"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Inter&display=swap"
+      rel="stylesheet"
+    />
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+      var socket = null;
+      $;
+      var timer = null;
+      $(document).ready(function () {
+        socket = io.connect(); // 3000port
+        // Node.js보낸 데이터를 수신하는 부분
+        socket.on("socket_evt_mqtt", function (data) {
+          data = JSON.parse(data);
+          console.log(data);
+          $(".mqttlist").html(
+            "<li>" +
+              " tmp: " +
+              data.tmp +
+              "°C" +
+              " hum: " +
+              data.hum +
+              "%" +
+              " pm1: " +
+              data.pm1 +
+              " pm2.5: " +
+              data.pm2 +
+              " pm10: " +
+              data.pm10 +
+              "</li>"
+          );
+        });
+        if (timer == null) {
+          timer = window.setInterval("timer1()", 1000);
+        }
+      });
+      function timer1() {
+        socket.emit("socket_evt_mqtt", JSON.stringify({}));
+        console.log("---------");
+      }
+      function ledOnOff(value) {
+        // {"led":1}, {"led":2}
+        socket.emit("socket_evt_led", JSON.stringify({ led: Number(value) }));
+      }
+      // ajax = Asynchronous JavaScript and XML
+      function ajaxledOnOff(value) {
+        if (value == "1") var value = "on";
+        else if (value == "2") var value = "off";
+        $.ajax({
+          url: "http://localhost:3000/devices/led", //local url
+          type: "post",
+          data: { flag: value },
+          success: ledStatus,
+          error: function (request, status, error) {
+            alert(
+              "code:" +
+                request.status +
+                "\n" +
+                "message:" +
+                request.responseText +
+                "\n" +
+                "error:" +
+                error
+            );
+          },
+        });
+      }
+      function ledStatus(obj) {
+        $("#led").html("<font color='red'>" + obj.led + "</font> 되었습니다.");
+      }
+    </script>
+  </head>
+  <body>
+    <h2
+      style="
+        background: linear-gradient(
+          to right,
+          #a7a3ff,
+          #ffa7a3,
+          #671cc4,
+          #5673bd
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-family: 'Dongle', sans-serif;
+        text-align: center;
+      "
+    >
+      socket 이용한 센서 모니터링 서비스
+    </h2>
+    <div id="msg">
+      <div id="mqtt_logs">
+        <ul class="mqttlist"></ul>
+        <br />
+      </div>
+
+      <h2
+        style="
+          border-bottom: 1px solid #688ff4;
+          padding: 0.1em;
+          border-top: 1px solid #688ff4;
+          padding: 0.1em;
+          font-family: 'Dongle', sans-serif;
+          text-align: center;
+        "
+      >
+        socket 통신 방식(LED제어)
+      </h2>
+      <!-- <button onclick="ledOnOff(1)">LED_ON</button> -->
+      <button
+        onclick="ledOnOff(1)"
+        type="button"
+        class="btn btn-danger"
+        control-id="ControlID-50"
+      >
+        LED_ON
+      </button>
+
+      <!-- <button onclick="ledOnOff(2)">LED_OFF</button> -->
+      <button
+        onclick="ledOnOff(2)"
+        type="button"
+        class="btn btn-success"
+        control-id="ControlID-47"
+      >
+        LED_OFF
+      </button>
+
+      <h2
+        style="
+          border-bottom: 1px solid #688ff4;
+          padding: 0.1em;
+          border-top: 1px solid #688ff4;
+          padding: 0.1em;
+          font-family: 'Dongle', sans-serif;
+          text-align: center;
+        "
+      >
+        RESTfull Service 통신 방식(LED제어)
+      </h2>
+      <!-- <button onclick="ajaxledOnOff(1)">LED_ON</button> -->
+      <button
+        onclick="ajaxledOnOff(1)"
+        type="button"
+        class="btn btn-danger"
+        control-id="ControlID-50"
+      >
+        LED_ON
+      </button>
+
+      <!-- <button onclick="ajaxledOnOff(2)">LED_OFF</button> -->
+      <button
+        onclick="ajaxledOnOff(2)"
+        type="button"
+        class="btn btn-success"
+        control-id="ControlID-47"
+      >
+        LED_OFF
+      </button>
+      <div
+        id="led"
+        style="
+          border-bottom: 1px solid #688ff4;
+          padding: 0.1em;
+          border-top: 1px solid #688ff4;
+          padding: 0.1em;
+          font-family: 'Dongle', sans-serif;
+          font-size: larger;
+          text-align: center;
+        "
+      >
+        LED STATUS
+      </div>
+    </div>
+  </body>
+</html>
