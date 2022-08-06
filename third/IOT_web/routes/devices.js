@@ -3,7 +3,7 @@ var router = express.Router();
 const mqtt = require("mqtt");
 const Sensors = require("../models/sensors");
 // MQTT Server 접속
-const client = mqtt.connect("mqtt://172.20.10.12"); // 라즈베리파이 url
+const client = mqtt.connect("mqtt://192.168.1.48"); // 라즈베리파이 url
 //웹에서 rest-full 요청받는 부분(POST) web - > ras pi -> arduino -> led control
 router.post("/led", function (req, res, next) {
   res.set("Content-Type", "text/json");

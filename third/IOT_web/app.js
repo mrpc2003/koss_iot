@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/devices", devicesRouter);
 
 //MQTT접속 하기
-const client = mqtt.connect("mqtt://172.20.10.12"); // 라즈베리파이 url
+const client = mqtt.connect("mqtt://192.168.1.48"); // 라즈베리파이 url
 client.on("connect", () => {
   console.log("mqtt connect");
   client.subscribe("sensors");
