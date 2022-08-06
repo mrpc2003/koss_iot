@@ -40,6 +40,24 @@ class MyApp(QMainWindow):
         self.pm10title.setAlignment(Qt.AlignCenter)
         self.imgstatus.setAlignment(Qt.AlignRight)
 
+        # pm1TitleFont = self.pm1title.font()
+        # pm2TitleFont = self.pm2title.font()
+        # pm10TitleFont = self.pm10title.font()
+        # imgStatusFont = self.imgstatus.font()
+
+        # pm1TitleFont.setPointSize(20)
+        # pm2TitleFont.setPointSize(20)
+        # pm10TitleFont.setPointSize(20)
+        # imgStatusFont.setPointSize(50)
+
+        # imgStatusFont.setBold(True)
+
+        # self.pm1title.setFont(pm1TitleFont)
+        # self.pm2title.setFont(pm2TitleFont)
+        # self.pm10title.setFont(pm10TitleFont)
+        # self.imgstatus.setFont(imgStatusFont)
+
+
         vbox1.addWidget(self.pm1title)
         vbox1.addWidget(self.pm2title)
         vbox1.addWidget(self.pm10title)
@@ -88,6 +106,7 @@ class MyApp(QMainWindow):
         self.pm1title.setText(f'현재 실내 pm1 농도는 {self.pm1[-1]}에요')
         self.pm2title.setText(f'현재 실내 pm2 농도는 {self.pm2[-1]}에요')
         self.pm10title.setText(f'현재 실내 pm10 농도는 {self.pm10[-1]}에요')
+
         if 0 <= self.pm10[-1] <= 30 or 0 <= self.pm2[-1] <= 15:
             self.status.setText('좋음')
             self.imgstatus.setPixmap(
@@ -125,7 +144,10 @@ class MyApp(QMainWindow):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
-    fontDB = QFontDatabase()
-    fontDB.addApplicationFont('NotoSansKR-Regular.otf')
-    app.setFont(QFont('NotoSansKR-Regular'))
+
+    id = QFontDatabase.addApplicationFont("Noto_Sans_KR\\NotoSansKR-Bold.otf")
+    _fontstr = QFontDatabase.applicationFontFamilies(id)[0]
+    _font = QFont(_fontstr)
+    app.setFont(_font)
+
     sys.exit(app.exec_())
