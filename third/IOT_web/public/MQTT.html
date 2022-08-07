@@ -1,20 +1,26 @@
 <!DOCTYPE html>
+<!--html로 작성-->
 <html>
   <head>
     <meta charset="utf-8" />
+    <!--uft8로 인코딩-->
     <title>iot test</title>
+    <!--웹 페이지 제목 -> iot test로 설정-->
+    <!--bootstrap를 사용하기 위한 테마 설정-->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sketchy/bootstrap.min.css"
       integrity="sha384-RxqHG2ilm4r6aFRpGmBbGTjsqwfqHOKy1ArsMhHusnRO47jcGqpIQqlQK/kmGy9R"
       crossorigin="anonymous"
     />
+    <!--google font -> font 설정 -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Inter&display=swap"
       rel="stylesheet"
     />
+    
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script type="text/javascript">
@@ -48,14 +54,17 @@
           timer = window.setInterval("timer1()", 1000);
         }
       });
+
       function timer1() {
         socket.emit("socket_evt_mqtt", JSON.stringify({}));
         console.log("---------");
       }
+
       function ledOnOff(value) {
         // {"led":1}, {"led":2}
         socket.emit("socket_evt_led", JSON.stringify({ led: Number(value) }));
       }
+
       // ajax = Asynchronous JavaScript and XML
       function ajaxledOnOff(value) {
         if (value == "1") var value = "on";
@@ -79,6 +88,7 @@
           },
         });
       }
+
       function ledStatus(obj) {
         $("#led").html("<font color='red'>" + obj.led + "</font> 되었습니다.");
       }

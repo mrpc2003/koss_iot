@@ -1,17 +1,18 @@
 import sys
+# matplotlib의 graph에서 font를 설정하기 위한 font manager import
 import matplotlib.font_manager as fm
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont, QPixmap, QFontDatabase
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QHBoxLayout, QVBoxLayout, QMainWindow
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-from pymongo import MongoClient  # pip install pymongo, pip install dnspython
-
+from pymongo import MongoClient  # Python에서 mongoDB를 이용하기 위한 라이브러리로 pymongo를 사용
+# mongoDB의 내 데이터베이스 주소를 입력
 client = MongoClient(
     "mongodb+srv://mrpc2003:rainb0w12@Cluster0.yxiwiyk.mongodb.net/?retryWrites=true&w=majority")
 
-db = client['test']
-collection = db['sensors']
+db = client['test']  # 'test' 이름의 데이터 베이스를 db변수로 지정
+collection = db['sensors']  # 'sensors' 이름의 collections를 collection 변수로 지정
 
 
 class MyApp(QMainWindow):
@@ -22,58 +23,48 @@ class MyApp(QMainWindow):
         self.main_widget = QWidget()
         self.setCentralWidget(self.main_widget)
 
+        # matplotlib의 그래프를 가로 5인치, 세로 5인치로 설정
         dynamic_canvas = FigureCanvas(Figure(figsize=(5, 5)))
 
+        # {vbox1, (hbox1 ⊂ vbox2)} ⊂ vbox
+        # 변수 vbox에 수직 box layout을 지정(메인이 되는 layout)
         vbox = QVBoxLayout(self.main_widget)
-        vbox1 = QVBoxLayout(self.main_widget)
-        vbox2 = QVBoxLayout(self.main_widget)
-        hbox1 = QHBoxLayout(self.main_widget)
+        vbox1 = QVBoxLayout(self.main_widget)  # 변수 vbox1에 수직 box layout을 지정
+        vbox2 = QVBoxLayout(self.main_widget)  # 변수 vbox2에 수직 box layout을 지정
+        hbox1 = QHBoxLayout(self.main_widget)  # 변수 hbox1에 수평 box layout을 지정
 
-        self.pm1title = QLabel()
-        self.pm2title = QLabel()
-        self.pm10title = QLabel()
-        self.imgstatus = QLabel()
-        self.status = QLabel()
+        self.pm1title = QLabel()  # 변수 self.pm1title에 라벨을 지정
+        self.pm2title = QLabel()  # 변수 self.pm2title에 라벨을 지정
+        self.pm10title = QLabel()  # 변수 self.pm10title에 라벨을 지정
+        self.imgstatus = QLabel()  # 변수 self.imgstatus에 라벨을 지정
+        self.status = QLabel()  # 변수 self.status에 라벨을 지정
 
+        # 변수 self.pm1title을 가운데 정렬 시킴
         self.pm1title.setAlignment(Qt.AlignCenter)
+        # 변수 self.pm2title을 가운데 정렬 시킴
         self.pm2title.setAlignment(Qt.AlignCenter)
+        # 변수 self.pm10title을 가운데 정렬 시킴
         self.pm10title.setAlignment(Qt.AlignCenter)
+        # 변수 self.imgstatus을 오른쪽 정렬 시킴
         self.imgstatus.setAlignment(Qt.AlignRight)
 
-        # pm1TitleFont = self.pm1title.font()
-        # pm2TitleFont = self.pm2title.font()
-        # pm10TitleFont = self.pm10title.font()
-        # imgStatusFont = self.imgstatus.font()
+        vbox1.addWidget(self.pm1title)  # vbox1 layout에 변수 self.pm1title을 추가
+        vbox1.addWidget(self.pm2title)  # vbox1 layout에 변수 self.pm2title을 추가
+        vbox1.addWidget(self.pm10title)  # vbox1 layout에 변수 self.pm10title을 추가
 
-        # pm1TitleFont.setPointSize(20)
-        # pm2TitleFont.setPointSize(20)
-        # pm10TitleFont.setPointSize(20)
-        # imgStatusFont.setPointSize(50)
+        hbox1.addWidget(self.imgstatus)  # hbox1 layout에 변수 self.imgstatus을 추가
+        hbox1.addWidget(self.status)  # hbox1 layout에 변수 self.status을 추가
+        vbox2.addLayout(hbox1)  # vbox2 layout에 hbox1 layout을 추가
 
-        # imgStatusFont.setBold(True)
-
-        # self.pm1title.setFont(pm1TitleFont)
-        # self.pm2title.setFont(pm2TitleFont)
-        # self.pm10title.setFont(pm10TitleFont)
-        # self.imgstatus.setFont(imgStatusFont)
-
-
-        vbox1.addWidget(self.pm1title)
-        vbox1.addWidget(self.pm2title)
-        vbox1.addWidget(self.pm10title)
-
-        hbox1.addWidget(self.imgstatus)
-        hbox1.addWidget(self.status)
-        vbox2.addLayout(hbox1)
-
-        vbox.addLayout(vbox1)
-        vbox.addLayout(vbox2)
+        vbox.addLayout(vbox1)  # vbox layout에 vbox1 layout을 추가
+        vbox.addLayout(vbox2)  # vbox layout에 vbox1 layout을 추가
+        # vbox layout에 matplotlib graph(dynamic_canvas)를 추가
         vbox.addWidget(dynamic_canvas)
 
-        self.createdtime = list()
-        self.pm1 = list()
-        self.pm2 = list()
-        self.pm10 = list()
+        self.createdtime = list()  # mongoDB로 부터 시간정보를 가져오기 위한 변수 self.createdtime을 list형태로 지정
+        self.pm1 = list()  # mongoDB로 부터 시간정보를 가져오기 위한 변수 self.createdtime을 list형태로 지정
+        self.pm2 = list()  # mongoDB로 부터 시간정보를 가져오기 위한 변수 self.createdtime을 list형태로 지정
+        self.pm10 = list()  # mongoDB로 부터 시간정보를 가져오기 위한 변수 self.createdtime을 list형태로 지정
 
         self.dynamic_ax = dynamic_canvas.figure.subplots()
         self.timer = dynamic_canvas.new_timer(
