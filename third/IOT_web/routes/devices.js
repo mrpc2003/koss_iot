@@ -1,4 +1,4 @@
-var express = require("express");
+var express = require("express"); // express 모듈 불러오기
 var router = express.Router();
 const mqtt = require("mqtt");
 const Sensors = require("../models/sensors");
