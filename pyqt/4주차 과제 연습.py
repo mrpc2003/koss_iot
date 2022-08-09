@@ -15,18 +15,19 @@ db = client['test']  # 'test' 이름의 데이터 베이스를 db변수로 지�
 collection = db['sensors']  # 'sensors' 이름의 collections를 collection 변수로 지정
 
 
-class MyApp(QMainWindow):
+class MyApp(QMainWindow):  # MyApp 클래스를 만드는데 QMainWindow 클래스를 상속받는다
 
-    def __init__(self):
+    def __init__(self):  # 파이썬의 생성자명은 __init__ 고정이므로 첫번째 고정값은 self -> instance 이름을 self로
         super().__init__()
 
-        self.main_widget = QWidget()
-        self.setCentralWidget(self.main_widget)
+        self.main_widget = QWidget()  # 프로그램의 메인 위젯 설정
+        self.setCentralWidget(self.main_widget)  # 메인 위젯 가운데 정렬 설정
 
         # matplotlib의 그래프를 가로 5인치, 세로 5인치로 설정
         dynamic_canvas = FigureCanvas(Figure(figsize=(5, 5)))
 
         # {vbox1, (hbox1 ⊂ vbox2)} ⊂ vbox
+
         # 변수 vbox에 수직 box layout을 지정(메인이 되는 layout)
         vbox = QVBoxLayout(self.main_widget)
         vbox1 = QVBoxLayout(self.main_widget)  # 변수 vbox1에 수직 box layout을 지정
@@ -66,20 +67,23 @@ class MyApp(QMainWindow):
         self.pm2 = list()  # mongoDB로 부터 시간정보를 가져오기 위한 변수 self.createdtime을 list형태로 지정
         self.pm10 = list()  # mongoDB로 부터 시간정보를 가져오기 위한 변수 self.createdtime을 list형태로 지정
 
-        self.dynamic_ax = dynamic_canvas.figure.subplots()
-        self.timer = dynamic_canvas.new_timer(
+        self.dynamic_ax = dynamic_canvas.figure.subplots()  # matplotlib의 figure에 plot 추가
+        self.timer = dynamic_canvas.new_timer(  # 1초 (1000ms)마다 graph 업데이트
             1000, [(self.update_canvas, (), {})])
-        self.timer.start()
+        self.timer.start()  # 타이머 시작
 
-        self.setWindowTitle('실내 미세먼지 농도 측정기')
+        self.setWindowTitle('실내 미세먼지 농도 측정기')  # 프로그램 title 설정
+        # 생성할 창의 위치 왼쪽에서 떨어진 값, 위쪽에서 떨어진 값, 창의 크기 가로, 창의 크기 세로
         self.setGeometry(300, 100, 600, 600)
-        self.show()
+        self.show()  # 창 보여주기
 
-    def update_canvas(self):
-        path = 'Noto_Sans_KR\\NotoSansKR-Regular.otf'
+    def update_canvas(self):  # graph 업데이트 함수 작성
+        path = 'Noto_Sans_KR\\NotoSansKR-Regular.otf'  # font path 설정
+        # graph에 표시되는 font와 size 설정
         fontprop = fm.FontProperties(fname=path, size=18)
 
-        self.dynamic_ax.clear()
+        self.dynamic_ax.clear()  # graph 화면 초기화
+        # mongoDB에서 id값을 기준으로 최신순 정렬을 하여 변수 d에 1개만 저장
         d = collection.find().sort('_id', -1).limit(1)
         for i in d:
             createdtime = str(i['created_at'])
@@ -88,11 +92,11 @@ class MyApp(QMainWindow):
             self.pm2.append(int(i['pm2']))  # y축 좌표에는 센서 값
             self.pm10.append(int(i['pm10']))  # y축 좌표에는 센서 값
 
-        if len(self.createdtime) >= 6:
-            del self.createdtime[0]
-            del self.pm1[0]
-            del self.pm2[0]
-            del self.pm10[0]
+        if len(self.createdtime) >= 6:  # (그래프 영역이 겹쳐서 보이지 않도록 하기 위해서) 가져온 데이터가 6개 보다 많아진다면
+            del self.createdtime[0]  # 가장 첫번째 시간 데이터 삭제
+            del self.pm1[0]  # 가장 첫번째 pm1 데이터 삭제
+            del self.pm2[0]  # 가장 첫번째 pm2 데이터 삭제
+            del self.pm10[0]  # 가장 첫번째 pm10 데이터 삭제
 
         self.pm1title.setText(f'현재 실내 pm1 농도는 {self.pm1[-1]}에요')
         self.pm2title.setText(f'현재 실내 pm2 농도는 {self.pm2[-1]}에요')
@@ -132,13 +136,16 @@ class MyApp(QMainWindow):
         self.dynamic_ax.figure.canvas.draw()
 
 
+# py파일은 하나의 module 형태로 만들어진다 -> 어느 파일에서 import하는지에 따라서 __name__ 값이 달라진다.
 if __name__ == '__main__':
+    # 즉 자기가 직접 실행하기 위해서 필요한 구문
     app = QApplication(sys.argv)
-    ex = MyApp()
+    ex = MyApp()  # 생성자의 self는 ex를 전달받게 된다
 
     id = QFontDatabase.addApplicationFont("Noto_Sans_KR\\NotoSansKR-Bold.otf")
     _fontstr = QFontDatabase.applicationFontFamilies(id)[0]
     _font = QFont(_fontstr)
     app.setFont(_font)
 
+    # app 객체를 실행시키고, system의 x버튼을 누르면 실행되고 있는 App를 종료시켜준다
     sys.exit(app.exec_())
