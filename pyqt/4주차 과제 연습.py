@@ -98,42 +98,51 @@ class MyApp(QMainWindow):  # MyApp 클래스를 만드는데 QMainWindow 클래�
             del self.pm2[0]  # 가장 첫번째 pm2 데이터 삭제
             del self.pm10[0]  # 가장 첫번째 pm10 데이터 삭제
 
-        self.pm1title.setText(f'현재 실내 pm1 농도는 {self.pm1[-1]}에요')
-        self.pm2title.setText(f'현재 실내 pm2 농도는 {self.pm2[-1]}에요')
-        self.pm10title.setText(f'현재 실내 pm10 농도는 {self.pm10[-1]}에요')
+        self.pm1title.setText(
+            f'현재 실내 pm1 농도는 {self.pm1[-1]}에요')  # 실내 pm1 농도 업데이트
+        self.pm2title.setText(
+            f'현재 실내 pm2 농도는 {self.pm2[-1]}에요')  # 실내 pm2.5 농도 업데이트
+        self.pm10title.setText(
+            f'현재 실내 pm10 농도는 {self.pm10[-1]}에요')  # 실내 pm10 농도 업데이트
 
+        # 만약 pm10 농도가 30이하이거나 pm2 농도가 15이하일 때
         if 0 <= self.pm10[-1] <= 30 or 0 <= self.pm2[-1] <= 15:
-            self.status.setText('좋음')
+            self.status.setText('좋음')  # '좋음' 출력
             self.imgstatus.setPixmap(
-                QPixmap("finedust\\best.png").scaled(50, 50))
+                QPixmap("finedust\\best.png").scaled(50, 50))  # 현재상태 좋음 사진으로 교체
 
+        # 만약 pm10 농도가 31이상 50이하이거나 pm2 농도가 16이상 25이하일 때
         if 31 <= self.pm10[-1] <= 50 or 16 <= self.pm2[-1] <= 25:
-            self.status.setText('보통')
+            self.status.setText('보통')  # '보통' 출력
             self.imgstatus.setPixmap(
-                QPixmap("finedust\\good.png").scaled(50, 50))
+                QPixmap("finedust\\good.png").scaled(50, 50))  # 현재상태 보통 사진으로 교체
 
+        # 만약 pm10 농도가 51이상 100이하이거나 pm2 농도가 26이상 50이하일 때
         if 51 <= self.pm10[-1] <= 100 or 26 <= self.pm2[-1] <= 50:
-            self.status.setText('나쁨')
+            self.status.setText('나쁨')  # '나쁨' 출력
             self.imgstatus.setPixmap(
-                QPixmap("finedust\\bad.png").scaled(50, 50))
+                QPixmap("finedust\\bad.png").scaled(50, 50))  # 현재상태 나쁨 사진으로 교체
 
+        # 만약 pm10 농도가 101이상이거나 pm2 농도가 51이상일 때
         if 101 <= self.pm10[-1] or 51 <= self.pm2[-1]:
-            self.status.setText('매우 나쁨')
+            self.status.setText('매우 나쁨')  # "매우 나쁨" 출력
             self.imgstatus.setPixmap(
-                QPixmap("finedust\\worst.png").scaled(50, 50))
+                QPixmap("finedust\\worst.png").scaled(50, 50))  # 현재상태 매우 나쁨 사진으로 교체
 
         self.dynamic_ax.plot(self.createdtime, self.pm1,
-                             color='limegreen', label='pm1', marker=".")
+                             color='limegreen', label='pm1', marker=".")  # pm1 graph 생성 (x축은 시간, y축은 pm1 농도 데이터, 그래프 생성 데이터에는 .으로 표시, 색은 limegreen)
         self.dynamic_ax.plot(self.createdtime, self.pm2,
-                             color='violet', label='pm2.5', marker=".")
+                             color='violet', label='pm2.5', marker=".")  # pm2.5 graph 생성 (x축은 시간, y축은 pm2.5 농도 데이터, 그래프 생성 데이터에는 .으로 표시, 색은 violet)
         self.dynamic_ax.plot(self.createdtime, self.pm10,
-                             color='dodgerblue', label='pm10', marker=".")
+                             color='dodgerblue', label='pm10', marker=".")  # pm10 graph 생성 (x축은 시간, y축은 pm10 농도 데이터, 그래프 생성 데이터에는 .으로 표시, 색은 dodgerblue)
         self.dynamic_ax.legend(
-            loc=(0, 1), ncol=3, fontsize=10, frameon=True, shadow=True)
+            loc=(0, 1), ncol=3, fontsize=10, frameon=True, shadow=True)  # 범례 생성(그래프 위치, 표시 그래프, 범례 font size, 프레임 효과, 그림자 효과)
+        # x축 이름을 '시간'으로 설정, font는 변수 fontprop에서 가져옴(noto sans)
         self.dynamic_ax.set_xlabel('시간', fontproperties=fontprop)
+        # y축 이름을 '㎍/㎥'으로 설정, font는 변수 fontprop에서 가져옴(noto sans)
         self.dynamic_ax.set_ylabel('㎍/㎥', fontproperties=fontprop)
-        self.dynamic_ax.grid(True, axis='y')
-        self.dynamic_ax.figure.canvas.draw()
+        self.dynamic_ax.grid(True, axis='y')  # 그래프에서 y축 방향으로 그리드 생성
+        self.dynamic_ax.figure.canvas.draw()  # 그래프 생성
 
 
 # py파일은 하나의 module 형태로 만들어진다 -> 어느 파일에서 import하는지에 따라서 __name__ 값이 달라진다.
