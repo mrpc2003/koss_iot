@@ -1,0 +1,135 @@
+html {
+  background-color: #2c3137;
+  color: white;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 100px;
+  margin-left: 200px;
+  margin-top: 30px;
+}
+.header1 span {
+  margin: 10px;
+  font-weight: 500;
+}
+.header1 img {
+  text-align: center;
+}
+.header2 {
+  display: flex;
+}
+.header2 button {
+  margin-inline-end: 10px;
+}
+.search {
+  background-color: #464b4f;
+  font-size: 16px;
+  width: 325px;
+  padding: 10px;
+  border: 0px;
+  outline: none;
+  float: left;
+  border-radius: 10px;
+  text-align: left;
+  color: #c1c3c5;
+}
+.main {
+  position: absolute;
+  top: 200px;
+  left: 300px;
+}
+.title {
+  font-size: 70px;
+  font-family: "Inter", sans-serif;
+}
+.write {
+  font-weight: 500;
+  color: #9da2a6;
+  line-height: 160%;
+  font-size: larger;
+}
+.write_link {
+  text-decoration: underline #9da2a66c 1px;
+  text-underline-position: under;
+  text-align: justify;
+  line-height: 160%;
+  font-size: larger;
+}
+.main2 {
+  background-color: white;
+  color: black;
+  width: 600px;
+  height: 660px;
+  position: absolute;
+  top: 100px;
+  right: 200px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+}
+.main2 input {
+  border-radius: 5px;
+  border: 1px solid #b6b8bd85;
+}
+.info {
+  margin-left: 30px;
+  margin-top: 30px;
+}
+.info_content {
+  margin-top: 20px;
+  line-height: 30%;
+  margin-left: 30px;
+  margin-right: 30px;
+  text-align: left;
+}
+.info_content_link {
+  margin-top: 20px;
+  line-height: 30%;
+  margin-left: 30px;
+  margin-right: 30px;
+  text-align: left;
+}
+.Signup {
+  background-color: #2c3137;
+  border: 2px solid #9da2a6;
+  border-radius: 10px;
+  color: white;
+  padding: 1px 10px;
+
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.Signin {
+  background-color: #2c3137;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  padding: 1px 10px;
+
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+.info_signup {
+  background-color: #2ebc4e;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  font-size: large;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  margin-left: 30px;
+  margin-right: 30px;
+  height: 80px;
+}
+.input {
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 10px;
+  height: 60px;
+}
