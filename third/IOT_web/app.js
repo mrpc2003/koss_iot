@@ -1,37 +1,39 @@
-const express = require("express");
-const app = express();
-const path = require("path");
-const bodyParser = require("body-parser");
-const mqtt = require("mqtt");
-const http = require("http");
-const mongoose = require("mongoose");
-const Sensors = require("./models/sensors");
-const devicesRouter = require("./routes/devices");
-require("dotenv/config");
+const express = require("express"); // express 모듈 불러오기
+const app = express(); // express 서버 생성
+const path = require("path"); // path 모듈 불러오기
+const bodyParser = require("body-parser"); // body-parser 모듈 불러오기
+const mqtt = require("mqtt"); // mqtt 모듈 불러오기
+const http = require("http"); // http 모듈 불러오기
+const mongoose = require("mongoose"); // mongoose 모듈 불러오기
+const Sensors = require("./models/sensors"); // 센서 모델 불러오기
+const devicesRouter = require("./routes/devices"); // 디바이스 라우터 불러오기
+require("dotenv/config"); // .env 파일 불러오기
 
-app.use(express.static(__dirname + "/public"));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/devices", devicesRouter);
+app.use(express.static(__dirname + "/public")); // public 폴더를 static으로 사용
+app.use(bodyParser.json()); // body-parser 사용
+app.use(bodyParser.urlencoded({ extended: false })); // body-parser 사용
+app.use("/devices", devicesRouter); // 라우터 사용
 
 //MQTT접속 하기
 const client = mqtt.connect("mqtt://192.168.1.48"); // 라즈베리파이 url
 client.on("connect", () => {
-  console.log("mqtt connect");
-  client.subscribe("sensors");
+  // 접속 성공시
+  console.log("mqtt connect"); // 콘솔에 접속 성공 메시지 출력
+  client.subscribe("sensors"); // 센서 정보 수신 시작
 });
 
 client.on("message", async (topic, message) => {
-  var obj = JSON.parse(message);
-  var date = new Date();
-  var year = date.getFullYear();
-  var month = date.getMonth();
-  var today = date.getDate();
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var seconds = date.getSeconds();
-  obj.created_at = new Date(
-    Date.UTC(year, month, today, hours, minutes, seconds)
+  // 센서 정보 수신 시
+  var obj = JSON.parse(message); // 센서 정보를 JSON 형식으로 변환
+  var date = new Date(); // 현재 시간 가져오기
+  var year = date.getFullYear(); // 현재 년도 가져오기
+  var month = date.getMonth(); // 현재 월 가져오기
+  var today = date.getDate(); // 현재 일 가져오기
+  var hours = date.getHours(); // 현재 시간 가져오기
+  var minutes = date.getMinutes(); // 현재 분 가져오기
+  var seconds = date.getSeconds(); // 현재 초 가져오기
+  obj.created_at = new Date( // 센서 정보에 시간 정보 추가
+    Date.UTC(year, month, today, hours, minutes, seconds) // 시간 정보 설정
   );
   // console.log(obj);
 
