@@ -14,6 +14,7 @@ public class question1 {
 		numList.add(sc.nextInt());
 		numList.add(sc.nextInt());
 		numList.add(sc.nextInt());
+		sc.close();
 		int sum = 0;
 		for(int i:numList)
 		{
