@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <!--html로 작성-->
 <html>
+  <!--html 시작-->
   <head>
+    <!--head 시작-->
     <meta charset="utf-8" />
-    <!--uft8로 인코딩-->
+    <!--유니코드 사용-->
     <title>iot test</title>
     <!--웹 페이지 제목 -> iot test로 설정-->
     <!--bootstrap를 사용하기 위한 테마 설정-->
@@ -20,77 +22,81 @@
       href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Inter&display=swap"
       rel="stylesheet"
     />
-    
+
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <!--socket.io 사용-->
     <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!--jquery 사용-->
+
+    <!--javascript 시작-->
     <script type="text/javascript">
-      var socket = null;
-      $;
-      var timer = null;
-      $(document).ready(function () {
-        socket = io.connect(); // 3000port
+      var socket = null; //socket 선언 및 초기화
+      $; //jquery 선언 및 초기화
+      var timer = null; //timer 선언 및 초기화
+      $(document).ready(function () { //jquery 시작 부분 -> 웹 페이지가 준비되면 실행됨
+        socket = io.connect(); // 3000port 연결 후 socket에 저장
         // Node.js보낸 데이터를 수신하는 부분
-        socket.on("socket_evt_mqtt", function (data) {
-          data = JSON.parse(data);
-          console.log(data);
-          $(".mqttlist").html(
+        socket.on("socket_evt_mqtt", function (data) { //socket_evt_mqtt 이벤트 수신
+          data = JSON.parse(data); //json 형식으로 변환 후 data에 저장
+          console.log(data); //data 출력
+          $(".mqttlist").html( //mqttlist 에 html 출력
             "<li>" +
               " tmp: " +
               data.tmp +
-              "°C" +
+              "°C" + //온도 값 출력
               " hum: " +
               data.hum +
-              "%" +
+              "%" + //습도 값 출력
               " pm1: " +
-              data.pm1 +
+              data.pm1 +  //pm1 값 출력
               " pm2.5: " +
-              data.pm2 +
+              data.pm2 + //pm2.5 값 출력
               " pm10: " +
-              data.pm10 +
+              data.pm10 + //pm10 값 출력
               "</li>"
           );
         });
-        if (timer == null) {
-          timer = window.setInterval("timer1()", 1000);
+        if (timer == null) { //timer가 null이면
+          timer = window.setInterval("timer1()", 1000);  //1초마다 timer1 함수 실행
         }
       });
 
-      function timer1() {
-        socket.emit("socket_evt_mqtt", JSON.stringify({}));
-        console.log("---------");
+      function timer1() {   //timer1 함수 시작
+        socket.emit("socket_evt_mqtt", JSON.stringify({})); //socket_evt_mqtt 이벤트 송신
+        console.log("---------"); //콘솔 출력
       }
 
-      function ledOnOff(value) {
+      function ledOnOff(value) { //ledOnOff 함수 시작
         // {"led":1}, {"led":2}
-        socket.emit("socket_evt_led", JSON.stringify({ led: Number(value) }));
+        socket.emit("socket_evt_led", JSON.stringify({ led: Number(value) })); //socket_evt_led 이벤트 송신
       }
 
       // ajax = Asynchronous JavaScript and XML
-      function ajaxledOnOff(value) {
-        if (value == "1") var value = "on";
-        else if (value == "2") var value = "off";
-        $.ajax({
-          url: "http://localhost:3000/devices/led", //local url
-          type: "post",
-          data: { flag: value },
-          success: ledStatus,
-          error: function (request, status, error) {
-            alert(
+      function ajaxledOnOff(value) { //ajaxledOnOff 함수 시작
+        if (value == "1") var value = "on"; //value가 1이면 on으로 설정
+        else if (value == "2") var value = "off"; //value가 2이면 off으로 설정
+        $.ajax({ //ajax 시작
+          url: "http://localhost:3000/devices/led", //local url 설정
+          type: "post", //post 설정
+          data: { flag: value }, //flag에 value 설정
+          success: ledStatus, //ledStatus 함수 실행
+          error: function (request, status, error) { //에러 시 실행
+            alert( //알림창 출력
               "code:" +
-                request.status +
-                "\n" +
+                request.status + //에러 코드 출력
+                "\n" +  //줄바꿈
                 "message:" +
-                request.responseText +
-                "\n" +
+                request.responseText + //에러 메세지 출력
+                "\n" + //줄바꿈
                 "error:" +
-                error
+                error //에러 출력
             );
           },
         });
       }
 
-      function ledStatus(obj) {
-        $("#led").html("<font color='red'>" + obj.led + "</font> 되었습니다.");
+      function ledStatus(obj) { //ledStatus 함수 시작
+        $("#led").html("<font color='red'>" + obj.led + "</font> 되었습니다."); //led 출력
       }
     </script>
   </head>
@@ -197,4 +203,6 @@
       </div>
     </div>
   </body>
+  <!-- body 종료 -->
 </html>
+<!-- html 종료 -->
