@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+/* 기본 css 설정 */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  color: inherit;
+  background: none;
+}
+
+.hidden {
+  display: none;
+}
+
+/* 세부 css 설정 */
+
+body {
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+main {
+  width: 500px;
+  background-color: rgb(105, 126, 94);
+  padding: 2em 0;
+  display: flex;
+  justify-content: center;
+}
+
+img {
+  width: 300px;
+  display: block;
+  margin: 0 auto;
+}
+
+.test {
+  width: 50px;
+  background-color: aquamarine;
+  border-style: solid;
+
+}
+
+.player {
+  color: white;
+}
+
+.progress-bar {
+  background: rgb(0, 170, 200);
+  margin: 2em 0 1em 0;
+}
+
+.progress {
+  height: 3px;
+  background: white;
+  width: 0;
+}
+
+.time {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1.5em;
+}
+
+.title {
+  text-align: center;
+  margin: 1em 0 0.5em 0;
+  font-size: 1.5em;
+}
+
+.artist {
+  display: block;
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+
+.btns {
+  display: flex;
+  justify-content: space-around;
+}
+
+.btns button {
+  border: none;
+  padding: 1em;
+  border-radius: 50%;
+}
+
+.btns button:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.btns i {
+  font-size: 1.5rem;
+}
