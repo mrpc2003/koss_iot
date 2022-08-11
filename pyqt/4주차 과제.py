@@ -1,11 +1,13 @@
 import sys  # python의 interpreter를 제어할 수 있는 방법을 제공
 # matplotlib의 graph에서 font를 설정하기 위한 font manager import
-import matplotlib.font_manager as fm
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont, QPixmap, QFontDatabase
+import matplotlib.font_manager as fm  # font manager import
+from PyQt5.QtCore import Qt  # PyQt5의 QtCore를 import
+from PyQt5.QtGui import QFont, QPixmap, QFontDatabase  # PyQt5의 QtGui를 import
+# PyQt5의 QtWidgets를 import
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QHBoxLayout, QVBoxLayout, QMainWindow
+# matplotlib의 FigureCanvasQTAgg를 import
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
+from matplotlib.figure import Figure  # matplotlib의 Figure를 import
 from pymongo import MongoClient  # Python에서 mongoDB를 이용하기 위한 라이브러리로 pymongo를 사용
 # mongoDB의 내 데이터베이스 주소를 입력
 client = MongoClient(
@@ -17,7 +19,7 @@ collection = db['sensors']  # 'sensors' 이름의 collections를 collection 변�
 
 class MyApp(QMainWindow):  # MyApp 클래스를 만드는데 QMainWindow 클래스를 상속받는다
 
-    def __init__(self):  # 파이썬의 생성자명은 __init__ 고정이므로 첫번째 고정값은 self -> instance 이름을 self로
+    def __init__(self):  # 파이썬의 생성자명은 __init__ 고정이므로 첫번째 고정값은 self -> instance 이름을 self로 지정
         super().__init__()  # 다른 class의 속성 및 method를 자동으로 불러와 해당 class에서도 사용이 가능하도록 함
 
         self.main_widget = QWidget()  # 프로그램의 메인 위젯 설정
@@ -138,13 +140,13 @@ class MyApp(QMainWindow):  # MyApp 클래스를 만드는데 QMainWindow 클래�
         self.dynamic_ax.plot(self.createdtime, self.pm10,
                              color='dodgerblue', label='pm10', marker=".")  # pm10 graph 생성 (x축은 시간, y축은 pm10 농도 데이터, 그래프 생성 데이터에는 .으로 표시, 색은 dodgerblue)
         self.dynamic_ax.legend(
-            loc=(0, 1), ncol=3, fontsize=10, frameon=True, shadow=True)  # 범례 생성(그래프 위치, 표시 그래프, 범례 font size, 프레임 효과, 그림자 효과)
+            loc=(0, 1), ncol=3, fontsize=10, frameon=True, shadow=True)  # 그래프에 범례 생성 (위치는 (0,1), 열은 3, 폰트크기는 10, 프레임은 True, 쉐도우는 True)
         # x축 이름을 '시간'으로 설정, font는 변수 fontprop에서 가져옴(noto sans)
         self.dynamic_ax.set_xlabel('시간', fontproperties=fontprop)
         # y축 이름을 '㎍/㎥'으로 설정, font는 변수 fontprop에서 가져옴(noto sans)
         self.dynamic_ax.set_ylabel('㎍/㎥', fontproperties=fontprop)
         self.dynamic_ax.grid(True, axis='y')  # 그래프에서 y축 방향으로 그리드 생성
-        self.dynamic_ax.figure.canvas.draw()  # 그래프 생성
+        self.dynamic_ax.figure.canvas.draw()  # 그래프 그리기
 
 
 # py파일은 하나의 module 형태로 만들어진다 -> 어느 파일에서 import하는지에 따라서 __name__ 값이 달라진다.
@@ -153,12 +155,12 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)  # QApplication 객체 생성
     ex = MyApp()  # 생성자의 self는 ex를 전달받게 된다
 
-    # QFontDatabase class의 addApplicationFont를 통해서 noto-sans font등록
-    id = QFontDatabase.addApplicationFont("Noto_Sans_KR\\NotoSansKR-Bold.otf")
+    id = QFontDatabase.addApplicationFont(
+        "Noto_Sans_KR\\NotoSansKR-Bold.otf")  # noto-sans font를 등록하고 id를 반환받는다
     _fontstr = QFontDatabase.applicationFontFamilies(
-        id)[0]  # 변수 _fontstr에 등록한 noto-sans의 font id값 지정
-    _font = QFont(_fontstr)
-    app.setFont(_font)  # 프로그램에서 실행된 기본 font를 불러온 font로 지정
+        id)[0]  # 전달받은 id에 해당하는 font를 가져옴
+    _font = QFont(_fontstr)  # 변수 _font에 noto-sans의 font id값 지정
+    app.setFont(_font)  # app의 font 설정
 
     # app 객체를 실행시키고, system의 x버튼을 누르면 실행되고 있는 App를 종료시켜준다
     sys.exit(app.exec_())
