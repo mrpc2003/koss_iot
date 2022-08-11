@@ -15,15 +15,15 @@ app.use(bodyParser.urlencoded({ extended: false })); // body-parser 사용
 app.use("/devices", devicesRouter); // 라우터 사용
 
 //MQTT접속 하기
-const client = mqtt.connect("mqtt://192.168.1.48"); // 라즈베리파이 url
+const client = mqtt.connect("mqtt://192.168.1.48"); // 라즈베리파이 url 입력 (서버 주소)
 client.on("connect", () => {
-  // 접속 성공시
+  // 접속 성공시 실행
   console.log("mqtt connect"); // 콘솔에 접속 성공 메시지 출력
   client.subscribe("sensors"); // 센서 정보 수신 시작
 });
 
 client.on("message", async (topic, message) => {
-  // 센서 정보 수신 시
+  // 센서 정보 수신 시 실행
   var obj = JSON.parse(message); // 센서 정보를 JSON 형식으로 변환
   var date = new Date(); // 현재 시간 가져오기
   var year = date.getFullYear(); // 현재 년도 가져오기
@@ -35,56 +35,65 @@ client.on("message", async (topic, message) => {
   obj.created_at = new Date( // 센서 정보에 시간 정보 추가
     Date.UTC(year, month, today, hours, minutes, seconds) // 시간 정보 설정
   );
-  // console.log(obj);
 
   const sensors = new Sensors({
-    tmp: obj.tmp,
-    hum: obj.humi,
-    pm1: obj.pm1,
-    pm2: obj.pm25,
-    pm10: obj.pm10,
-    created_at: obj.created_at,
+    // 센서 정보를 저장할 모델 생성
+    tmp: obj.tmp, // 센서 정보에 온도 정보 추가
+    hum: obj.humi, // 센서 정보에 습도 정보 추가
+    pm1: obj.pm1, // 센서 정보에 PM1 정보 추가
+    pm2: obj.pm25, // 센서 정보에 PM2.5 정보 추가
+    pm10: obj.pm10, // 센서 정보에 PM10 정보 추가
+    created_at: obj.created_at, // 센서 정보에 시간 정보 추가
   });
 
   try {
-    const saveSensors = await sensors.save();
-    console.log("insert OK");
+    // 센서 정보 저장 시도
+    const saveSensors = await sensors.save(); // 센서 정보 저장
+    console.log("insert OK"); // 콘솔에 센서 정보 저장 성공 메시지 출력
   } catch (err) {
-    console.log({ message: err });
+    // 센서 정보 저장 실패시
+    console.log({ message: err }); // 콘솔에 센서 정보 저장 실패 메시지 출력
   }
 });
-app.set("port", "3000");
-var server = http.createServer(app);
-var io = require("socket.io")(server);
+app.set("port", "3000"); // 포트 설정
+var server = http.createServer(app); // 서버 생성
+var io = require("socket.io")(server); // 소켓 서버 생성
 io.on("connection", (socket) => {
+  // 소켓 연결 시 실행
   //웹에서 소켓을 이용한 sensors 센서데이터 모니터링
   socket.on("socket_evt_mqtt", function (data) {
-    Sensors.find({})
-      .sort({ _id: -1 })
-      .limit(1)
+    // 소켓 이벤트 시 실행
+    Sensors.find({}) // 센서 정보 조회
+      .sort({ _id: -1 }) // 최신 정보부터 조회
+      .limit(1) // 최신 1개 조회
       .then((data) => {
-        //console.log(JSON.stringify(data[0]));
-        socket.emit("socket_evt_mqtt", JSON.stringify(data[0]));
+        // 센서 정보 조회 성공시
+        socket.emit("socket_evt_mqtt", JSON.stringify(data[0])); // 소켓 이벤트 전송
       });
   });
   //웹에서 소켓을 이용한 LED ON/OFF 제어하기
   socket.on("socket_evt_led", (data) => {
-    var obj = JSON.parse(data);
-    client.publish("led", obj.led + "");
+    // 소켓 이벤트 시 실행
+    var obj = JSON.parse(data); // 소켓 이벤트 데이터를 JSON 형식으로 변환
+    client.publish("led", obj.led + ""); // LED 제어 소켓 전송
   });
 });
 
 //웹서버 구동 및 DATABASE 구동
 server.listen(3000, (err) => {
+  // 웹 서버 구동
   if (err) {
-    return console.log(err);
+    // 웹 서버 구동 실패시
+    return console.log(err); // 콘솔에 웹 서버 구동 실패 메시지 출력
   } else {
-    console.log("server ready");
+    // 웹 서버 구동 성공시
+    console.log("server ready"); // 콘솔에 웹 서버 구동 성공 메시지 출력
     //Connection To DB
     mongoose.connect(
-      process.env.MONGODB_URL,
-      { useNewUrlParser: true, useUnifiedTopology: true },
-      () => console.log("connected to DB!")
+      // DB 연결
+      process.env.MONGODB_URL, // DB 연결 주소
+      { useNewUrlParser: true, useUnifiedTopology: true }, // DB 연결 옵션
+      () => console.log("connected to DB!") // DB 연결 성공시 콘솔에 연결 메시지 출력
     );
   }
 });
