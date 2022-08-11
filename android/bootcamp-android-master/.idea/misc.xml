@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/mrpc2003/AndroidStudioProjects/bootcamp-android-master/app/src/main/res/font/font.xml" value="0.1" />
+        <entry key="..\:/Users/mrpc2003/AndroidStudioProjects/bootcamp-android-master/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/mrpc2003/AndroidStudioProjects/bootcamp-android-master/app/src/main/res/layout/list_sensor_item.xml" value="0.23125" />
+        <entry key="..\:/Users/mrpc2003/AndroidStudioProjects/bootcamp-android-master/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.224" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33229166666666665" />
         <entry key="app/src/main/res/layout/list_sensor_item.xml" value="0.33" />
       </map>
