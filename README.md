@@ -1,6 +1,6 @@
 <div align="center">
 
-# koss_iot
+# MQTT Indoor Environment Monitor
 
 English | [한국어](README.ko.md)
 

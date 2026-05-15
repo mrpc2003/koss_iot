@@ -1,6 +1,6 @@
 <div align="center">
 
-# koss_iot
+# MQTT 실내 환경 모니터링 시스템
 
 [English](README.md) | 한국어
 
