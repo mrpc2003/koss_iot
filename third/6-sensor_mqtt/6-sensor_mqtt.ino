@@ -13,9 +13,9 @@ PMS::DATA data; // 데이터를 받아올 객체
 Adafruit_BME280 bme; // I2C
 int led_pin = D5; //led 핀 설정
 
-const char* ssid = "507-701"; //사용하는 Wifi 이름
-const char* password = "01067372666"; // 비밀번호
-const char* mqtt_server = "192.168.1.48"; //mqtt 서버 주소(라즈베리파이에서 ifconfig로 inet 주소 확인)**꼭 수정!!!!!!!!!!!!!
+const char* ssid = "YOUR_WIFI_SSID"; // 사용하는 Wifi 이름
+const char* password = "YOUR_WIFI_PASSWORD"; // 비밀번호 (실제 값은 커밋하지 않기)
+const char* mqtt_server = "YOUR_MQTT_BROKER_IP"; // mqtt 서버 주소(라즈베리파이에서 ifconfig로 inet 주소 확인)**꼭 수정!!!!!!!!!!!!!
 const char* clientName = "pi"; // client 이름(생일 추천드려요~)
 
 WiFiClient espClient; // 인터넷과 연결할 수 있는 client 생성

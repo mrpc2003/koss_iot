@@ -1,4 +1,5 @@
 import sys  # python의 interpreter를 제어할 수 있는 방법을 제공
+import os
 # matplotlib의 graph에서 font를 설정하기 위한 font manager import
 import matplotlib.font_manager as fm
 from PyQt5.QtCore import Qt
@@ -7,10 +8,12 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QHBoxLayout, QVBoxLay
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from pymongo import MongoClient  # Python에서 mongoDB를 이용하기 위한 라이브러리로 pymongo를 사용
-# mongoDB의 내 데이터베이스 주소를 입력
-client = MongoClient(
-    "mongodb+srv://***REMOVED-SECRET***/?retryWrites=true&w=majority")
 
+mongo_url = os.environ.get("MONGODB_URL")
+if not mongo_url:
+    raise RuntimeError("MONGODB_URL 환경변수를 설정한 뒤 실행하세요.")
+
+client = MongoClient(mongo_url)
 db = client['test']  # 'test' 이름의 데이터 베이스를 db변수로 지정
 collection = db['sensors']  # 'sensors' 이름의 collections를 collection 변수로 지정
 

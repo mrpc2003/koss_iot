@@ -1,0 +1,32 @@
+# Environment files (keep examples committed)
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Dependency directories
+node_modules/
+
+# IDE/editor metadata
+.idea/
+*.iml
+.vscode/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Build/cache outputs
+build/
+dist/
+.gradle/
+.cxx/
+.externalNativeBuild/
+captures/
+cache/
+.cache/
+
+# OS files
+.DS_Store
+Thumbs.db

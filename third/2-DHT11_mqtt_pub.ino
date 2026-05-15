@@ -4,9 +4,9 @@
 
 DHT dht(D3, DHT11);// D3번 핀에 연결된 DHT11센서를 dht라는 객체로 생성
 
-const char* ssid = "KMU_SW"; //사용하는 Wifi 이름
-const char* password = "kookminsw"; // 비밀번호
-const char* mqtt_server = "192.168.***.***"; // mqtt 서버 주소(라즈베리파이에서 ifconfig로 inet 주소 확인)
+const char* ssid = "YOUR_WIFI_SSID"; // 사용하는 Wifi 이름
+const char* password = "YOUR_WIFI_PASSWORD"; // 비밀번호 (실제 값은 커밋하지 않기)
+const char* mqtt_server = "YOUR_MQTT_BROKER_IP"; // mqtt 서버 주소(라즈베리파이에서 ifconfig로 inet 주소 확인)
 const char* clientName = "030404Client"; // client 이름 (생일 추천)
 
 WiFiClient espClient; // 인터넷과 연결할 수 있는 client 생성
